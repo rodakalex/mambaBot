@@ -53,9 +53,10 @@ class Mamba:
             try:
                 self.driver.get(f'https://www.mamba.ru/chats/{girl_id}/contact')
                 time.sleep(3)
+                self.driver.find_element(By.XPATH, '//span[@data-name="status-verified"]')
                 element = self.driver.find_element(By.XPATH, '//textarea')
                 element.send_keys('Привет :3')
-                webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
+                # webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             except:
                 pass
 
@@ -76,12 +77,12 @@ class Mamba:
 if __name__ == '__main__':
     m = Mamba()
     m.login()
-    # time.sleep(5)
+    time.sleep(5)
 
     # алгоритм отправки сообщений
-    # m.search()
-    # m.save_girls_id()
-    # m.send_messages()
+    m.search()
+    m.save_girls_id()
+    m.send_messages()
 
     # алгоритм лайков
     m.send_likes()

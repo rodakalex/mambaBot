@@ -1,22 +1,36 @@
 import time
 import pyrogram
 import config
+from pyrogram import filters
+
+import model.base
+
+session = model.base.session
+app = pyrogram.Client(config.name, config.api_id, config.api_hash)
 
 
-class Leomathcbot:
-    def __init__(self):
-        self.app = pyrogram.Client(config.name, config.api_id, config.api_hash)
-        self.app.start()
+def send_messages(text):
+    time.sleep(1)
+    app.send_message(chat_id='leomatchbot', text=text)
 
-    def send_messages(self):
-        for i in range(200):
+
+@app.on_message(filters.private)
+def handle_message(client, message):
+    if message.caption is None:
+        time.sleep(10)
+    else:
+        if len(message.caption) < 100:
             time.sleep(1)
-            self.app.send_message(chat_id='leomatchbot', text='1')
-
-    def __del__(self):
-        del self.app
+            send_messages('3')
+        elif not session.query(model.base.Users).filter_by(caption=message.caption).first():
+            time.sleep(1)
+            send_messages('2')
+            send_messages('Ты классная :3')
+            new_data = model.base.Users(caption=message.caption)
+            session.add(new_data)
+            session.commit()
 
 
 if __name__ == '__main__':
-    bot = Leomathcbot()
-    bot.send_messages()
+    print("The program is running")
+    app.run()

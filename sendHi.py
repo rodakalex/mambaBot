@@ -1,0 +1,2 @@
+import pyrogram
+import config
